@@ -22,6 +22,9 @@ const Index = (props) => {
                     </div>
                 )) }
             </div>
+            <div>
+            <Link href="/posts/create">Create</Link>
+            </div>
 
         </Authenticated>
         );
