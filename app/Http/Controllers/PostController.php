@@ -6,22 +6,23 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Post;
 use App\Http\Requests\PostRequest;
+use App\Models\Category;
 
 class PostController extends Controller
 {
     public function index(Post $post)
     {
-        return Inertia::render("Post/Index", ["posts" => $post->get()]);
+        return Inertia::render("Post/Index", ["posts" => Post::with("category")->get()]);
     }
 
     public function show(Post $post)
     {
-        return Inertia::render("Post/Show", ["post" => $post]);
+        return Inertia::render("Post/Show", ["post" => $post->load('category')]);
     }
 
-    public function create()
+    public function create(Category $category)
     {
-        return Inertia::render("Post/Create");
+        return Inertia::render("Post/Create", ["categories" => $category->get()]);
     }
 
     public function store(PostRequest $request, Post $post)
@@ -31,9 +32,9 @@ class PostController extends Controller
         return redirect("/post/".$post->id);
     }
 
-    public function edit(Post $post)
+    public function edit(Post $post, Category $category)
     {
-        return Inertia::render("Post/Edit", ["post" => $post]);
+        return Inertia::render("Post/Edit", ["post" => $post, "categories" => $category->get()]);
     }
 
     public function update(PostRequest $request, Post $post)
